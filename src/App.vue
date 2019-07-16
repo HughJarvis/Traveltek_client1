@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h3>Flight data</h3>
-    <flight-filter/>
+    <flight-filter :flights="flights" :departureAirports="departureAirports" :departureDates="departureDates"/>
     <h4>Total flights: {{flights.length}}</h4>
     <flight-list :flights="flights"/>
   </div>
@@ -15,13 +15,24 @@ export default {
   data() {
     return {
       flights: [],
-      filteredFlights: []
+      filteredFlights: [],
+      departureAirports: [],
+      departureDates: []
     }
   },
+
+
 
   components: {
     'flight-filter': FlightFilter,
     'flight-list': FlightList
+  },
+
+  watch: {
+    flights(newValue, oldValue) {
+      console.log("new value: ", newValue);
+      console.log("old value: ", oldValue);
+    }
   },
 
   methods: {
@@ -47,11 +58,22 @@ export default {
       return flightsOn;
     },
 
-    //write method to get all departure airports
-    listDepartureAirports(){
-      const results = [...new Set(flights.map(flight => flight["-depair"]))]
-      return results;
+    listDepartureAirports: function(){
+      const airports = [...new Set(flights.map(flight => {
+        flight["-depair"]
+      }))];
+      this.departureAirports = airports
+    },
+
+    listDepartureDates: function(){
+      const dates = [...new Set(flights.map((flight) => {
+        flight["-outdepartdate"]
+      }))];
+      this.departureDates = dates
     }
+
+    //write method to get all departure airports
+
 
 
     //write method to get flights from given airport on given date
@@ -60,7 +82,12 @@ export default {
   mounted(){
     this.getFlights()
 
+  },
+
+  computed: {
+
   }
+
 }
 
 </script>
