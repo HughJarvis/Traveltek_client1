@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="flight-list-item">
-   <p>{{flight["-carrier"]}} {{flight["-outflightno"]}} from {{flight["-depair"]}} to {{flight["-destair"]}} on {{flight["-outdepartdate"]}}</p>
+   <p>{{flight["_attributes"].carrier}} {{flight["_attributes"].outflightno}} from {{flight["_attributes"].depair}} to {{flight["_attributes"].destair}} on {{flight["_attributes"].outdepartdate}}</p>
  </div>
 </template>
 

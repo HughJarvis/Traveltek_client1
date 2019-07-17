@@ -1,37 +1,40 @@
 <template>
   <div id="app">
     <h3>Flight data</h3>
+    <h4>Total number of flights: {{flights.length}}</h4>
+    <h5>-includes {{businessClassFlights.length}} Business Class ({{((businessClassFlights.length / flights.length)*100).toFixed(0)}}%)</h5>
+
     <flight-filter :flights="flights" :departureAirports="departureAirports" :departureDates="departureDates"/>
-    <h4>Total flights: {{flights.length}}</h4>
-    <flight-list :flights="flights"/>
+
   </div>
 </template>
 
 <script>
-import FlightList from '@/components/FlightList.vue';
+
 import FlightFilter from '@/components/FlightFilter.vue';
 
 export default {
   data() {
     return {
       flights: [],
-      filteredFlights: [],
+      businessClassFlights: [],
       departureAirports: [],
-      departureDates: []
+      departureDates: [],
+    
     }
   },
 
 
-
   components: {
-    'flight-filter': FlightFilter,
-    'flight-list': FlightList
+    'flight-filter': FlightFilter
   },
 
   watch: {
     flights(newValue, oldValue) {
-      console.log("new value: ", newValue);
-      console.log("old value: ", oldValue);
+      this.listDepartureAirports();
+      this.listDepartureDates();
+      this.listBizClassFlights();
+
     }
   },
 
@@ -40,39 +43,47 @@ export default {
       return fetch('http://localhost:3000/')
       .then(res => res.json())
       .then(data => this.flights = data)
+      .then(data => this.filteredFlights = data)
     },
 
-    //write method to get flights departing given airport
-    flightsFrom(airport){
-      const flightsFrom = this.flights.filter((flight) => {
-        flight["-depair"] === airport.JSON.stringify;
-      });
-      return flightsFrom;
-    },
 
-    //write method to get flights on given date
-    flightsOn(date){
-      const flightsOn = this.flights.filter((flight) => {
-        flight["-outdepartdate"] === date.JSON.stringify;
-      })
-      return flightsOn;
-    },
-
-    listDepartureAirports: function(){
-      const airports = [...new Set(flights.map(flight => {
-        flight["-depair"]
-      }))];
-      this.departureAirports = airports
-    },
-
-    listDepartureDates: function(){
-      const dates = [...new Set(flights.map((flight) => {
-        flight["-outdepartdate"]
-      }))];
-      this.departureDates = dates
-    }
 
     //write method to get all departure airports
+    listDepartureAirports(){
+      const airports = this.flights.map((flight) => {
+        return flight["_attributes"].depair
+      });
+      const uniqueAirports = [...new Set(airports)]
+      this.departureAirports = uniqueAirports
+    },
+
+    listDepartureDates(){
+      const dates = this.flights.map((flight) => {
+
+        return flight["_attributes"].outdepartdate
+      });
+      const uniqueDates = [...new Set(dates)]
+      this.departureDates = uniqueDates
+    },
+
+
+
+    listFlightNumbers(){
+      const flightNos = this.filteredFlights.map((flight) => {
+        return flight["_attributes"].outflightno
+      });
+        return flightnos
+    },
+
+    listBizClassFlights(){
+      const bizFlights = this.flights.filter((flight) => {
+        return flight["_attributes"].outflightclass === "Business"
+      });
+        this.businessClassFlights = bizFlights
+    }
+
+
+
 
 
 

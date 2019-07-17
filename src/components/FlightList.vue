@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <FlightListItem v-for="flight in flights" :flight="flight"/>
+    <FlightListItem v-for="flight in filteredFlights" :flight="flight"/>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ import FlightListItem from '@/components/FlightListItem.vue';
 
 export default {
   name: 'flight-list',
-  props: ['flights'],
+  props: ['filteredFlights'],
   components: { FlightListItem }
 }
 </script>
