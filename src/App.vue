@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import FlightFilter from '@/components/FlightFilter.vue';
 
 export default {
   data() {
@@ -34,7 +33,7 @@ export default {
     }
   },
 
-  
+
 
   watch: {
     flights(newValue, oldValue) {
